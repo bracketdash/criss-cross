@@ -1,0 +1,72 @@
+html,
+body {
+  background-color: #fff;
+  font-family: "Helvetica", "Arial", "Verdana", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.app-container {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.header {
+  background-color: #369;
+  padding: 10px 0;
+}
+
+.header > h1 {
+  color: #fff;
+  font-size: 24px;
+  font-weight: 400;
+  margin: 0;
+  text-align: center;
+}
+
+.container {
+  background-color: #555;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin: 24px auto;
+  padding: 1px;
+  text-align: center;
+  width: 352px;
+}
+
+.row {
+  display: flex;
+  gap: 1px;
+}
+
+.cell {
+  background-color: #fff;
+  font-size: 20px;
+  height: 54px;
+  width: 54px;
+}
+
+.cell.equals {
+  line-height: 52px;
+  width: 22px;
+}
+
+.cell.gray {
+  background-color: transparent;
+}
+
+.cell input {
+  height: 50px;
+  margin: 2px;
+  padding: 0;
+  width: 50px;
+  border: none;
+  font-size: 20px;
+  text-align: center;
+}
+
+.equals > .cell {
+  height: 22px;
+  line-height: 22px;
+}
