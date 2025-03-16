@@ -104,11 +104,11 @@ function handleKeyupOperator({ target }) {
 }
 
 function handleKeyupSolution({ target }) {
-  let value = target.value.replace(/[^0-9]/, "");
+  let value = target.value;
   if (parseInt(value, 10) > 504) {
     value = 504;
+    target.value = 504;
   }
-  target.value = value;
   if (value.length) {
     checkBoard();
   } else {
