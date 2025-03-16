@@ -29,7 +29,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1px;
-  margin: 24px auto;
+  margin: 24px auto 0;
   padding: 1px;
   text-align: center;
   width: 352px;
@@ -105,4 +105,23 @@ body {
 .solution input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.status-bar {
+  background-color: #eee;
+  height: 10px;
+  margin: 5px auto 60px;
+  width: 354px;
+}
+
+.status-bar.thinking {
+  background-color: #369;
+}
+
+.status-bar.complete {
+  background-color: #0b0;
+}
+
+.status-bar.invalid {
+  background-color: #911;
 }

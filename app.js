@@ -1,6 +1,7 @@
+const blankCells = document.querySelectorAll(".blank");
 const operatorInputs = document.querySelectorAll(".operator > input");
 const solutionInputs = document.querySelectorAll(".solution > input");
-const blankCells = document.querySelectorAll(".blank");
+const statusBar = document.querySelector(".status-bar");
 
 const ops = {
   "+": (a, b) => a + b,
@@ -71,20 +72,45 @@ function checkBoard() {
   const allFilledIn = [...operatorInputs, ...solutionInputs].every(
     ({ value }) => value.length
   );
+  statusBar.className = "status-bar thinking";
   if (!allFilledIn) {
     resetBlanks();
+    statusBar.className = "status-bar";
     return;
   }
   const operators = [...operatorInputs].map(({ value }) => value);
   const solutions = [...solutionInputs].map(({ value }) => parseInt(value, 10));
-  const winningPermutation = solve(operators, solutions);
-  if (!winningPermutation) {
-    resetBlanks();
-    return;
-  }
-  blankCells.forEach((cell, index) => {
-    cell.innerHTML = winningPermutation[index];
-  });
+  setTimeout(() => {
+    const winningPermutation = solve(operators, solutions);
+    if (!winningPermutation) {
+      resetBlanks();
+      statusBar.className = "status-bar invalid";
+      return;
+    }
+    blankCells.forEach((cell, index) => {
+      cell.innerHTML = winningPermutation[index];
+    });
+    statusBar.className = "status-bar complete";
+  }, 500);
+}
+
+function debounce(func, delay) {
+  let timeout = null;
+  let shouldCallAtEnd = false;
+  return function () {
+    const context = this;
+    const args = arguments;
+    shouldCallAtEnd = true;
+    if (!timeout) {
+      timeout = setTimeout(function () {
+        if (shouldCallAtEnd) {
+          func.apply(context, args);
+        }
+        shouldCallAtEnd = false;
+        timeout = null;
+      }, delay);
+    }
+  };
 }
 
 function handleKeyupOperator({ target }) {
@@ -117,11 +143,15 @@ function handleKeyupSolution({ target }) {
 }
 
 operatorInputs.forEach((el) => {
-  el.addEventListener("keyup", handleKeyupOperator);
+  el.addEventListener("keyup", (event) => {
+    debounce(handleKeyupOperator(event), 400);
+  });
 });
 
 solutionInputs.forEach((el) => {
-  el.addEventListener("keyup", handleKeyupSolution);
+  el.addEventListener("keyup", (event) => {
+    debounce(handleKeyupSolution(event), 400);
+  });
 });
 
 operatorInputs[0].focus();
