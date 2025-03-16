@@ -2,13 +2,37 @@ const operatorInputs = document.querySelectorAll(".operator > input");
 const solutionInputs = document.querySelectorAll(".solution > input");
 const blankCells = document.querySelectorAll(".blank");
 
-function fitsAllClues(board, permutation) {
-  // TODO
+const ops = {
+  "+": (a, b) => a + b,
+  "-": (a, b) => a - b,
+  X: (a, b) => a * b,
+  "/": (a, b) => a / b,
+};
+
+const inputClass = {
+  "+": "add",
+  "-": "subtract",
+  X: "multiply",
+  "/": "divide",
+};
+
+function fitsAllClues(o, s, p) {
+  const equations = [
+    [p[0], o[0], p[1], o[1], p[2]],
+    [p[3], o[5], p[4], o[6], p[5]],
+    [p[6], o[10], p[7], o[11], p[8]],
+    [p[0], o[2], p[3], o[7], p[6]],
+    [p[1], o[3], p[4], o[8], p[7]],
+    [p[2], o[4], p[5], o[9], p[8]],
+  ];
+  return equations.every((eq, i) => {
+    return ops[eq[3]](ops[eq[1]](eq[0], eq[2]), eq[4]) === s[i];
+  });
 }
 
-function solve(board) {
+function solve(operators, solutions) {
   const perm = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-  if (fitsAllClues(board, [...perm])) {
+  if (fitsAllClues(operators, solutions, [...perm])) {
     return perm;
   }
   const counts = new Array(9).fill(0);
@@ -24,7 +48,7 @@ function solve(board) {
         perm[counts[i]] = perm[i];
         perm[i] = temp;
       }
-      if (fitsAllClues(board, [...perm])) {
+      if (fitsAllClues(operators, solutions, [...perm])) {
         return perm;
       }
       counts[i]++;
@@ -51,19 +75,11 @@ function checkBoard() {
     resetBlanks();
     return;
   }
-  const operatorValues = [...operatorInputs].map(({ value }) => value);
-  const solutionValues = [...solutionInputs].map(({ value }) => value);
-  const winningPermutation = solve([
-    [...operatorValues.slice(0, 2), solutionValues[0]],
-    operatorValues.slice(2, 5),
-    [...operatorValues.slice(5, 7), solutionValues[1]],
-    operatorValues.slice(7, 10),
-    [...operatorValues.slice(10, 12), solutionValues[2]],
-    solutionValues.slice(3, 6),
-  ]);
+  const operators = [...operatorInputs].map(({ value }) => value);
+  const solutions = [...solutionInputs].map(({ value }) => parseInt(value, 10));
+  const winningPermutation = solve(operators, solutions);
   if (!winningPermutation) {
     resetBlanks();
-    // TODO: inform the user a solution couldn't be found
     return;
   }
   blankCells.forEach((cell, index) => {
@@ -79,6 +95,7 @@ function handleKeyupOperator({ target }) {
   if (target.value !== value) {
     target.value = value;
   }
+  target.className = inputClass[value];
   if (value.length) {
     checkBoard();
   } else {
@@ -106,3 +123,5 @@ operatorInputs.forEach((el) => {
 solutionInputs.forEach((el) => {
   el.addEventListener("keyup", handleKeyupSolution);
 });
+
+operatorInputs[0].focus();
