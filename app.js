@@ -122,11 +122,7 @@ function handleKeyupOperator({ target }) {
     target.value = value;
   }
   target.className = inputClass[value];
-  if (value.length) {
-    checkBoard();
-  } else {
-    resetBlanks();
-  }
+  checkBoard();
 }
 
 function handleKeyupSolution({ target }) {
@@ -135,11 +131,7 @@ function handleKeyupSolution({ target }) {
     value = 504;
     target.value = 504;
   }
-  if (value.length) {
-    checkBoard();
-  } else {
-    resetBlanks();
-  }
+  checkBoard();
 }
 
 operatorInputs.forEach((el) => {
