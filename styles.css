@@ -62,11 +62,25 @@ body {
   padding: 0;
   width: 50px;
   border: none;
-  font-size: 20px;
+  font-size: 24px;
   text-align: center;
 }
 
 .equals > .cell {
   height: 22px;
   line-height: 22px;
+}
+
+.cell input:not(:focus-visible):placeholder-shown {
+  outline: #f90 auto 1px;
+}
+
+.solution input {
+  -moz-appearance: textfield;
+}
+
+.solution input::-webkit-outer-spin-button,
+.solution input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
